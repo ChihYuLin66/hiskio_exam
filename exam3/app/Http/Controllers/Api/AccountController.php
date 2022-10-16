@@ -9,6 +9,13 @@ use Illuminate\Support\Facades\Validator;
 
 class AccountController extends Controller
 {
+    /**
+     * 取得帳號紀錄列表
+     * 
+     * @param $request
+     * 
+     * @return json
+     */
     public function index(Request $request) 
     {
         $records = Auth::user()->accounts()
@@ -32,6 +39,13 @@ class AccountController extends Controller
             ], '200');
     }
 
+    /**
+     * 寫入帳號存錢與提款
+     * 
+     * @param $request
+     * 
+     * @return json
+     */
     public function store(Request $request)
     {
         // 資料驗證

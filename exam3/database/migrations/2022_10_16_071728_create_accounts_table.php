@@ -18,7 +18,6 @@ class CreateAccountsTable extends Migration
             $table->foreignId('user_id')->constrained('users')->onUpdate('cascade')->onDelete('cascade');
             $table->integer('amount')->default(0)->comment('額度');
             $table->integer('balance')->default(0)->comment('餘額');
-            $table->text('description')->nullable()->comment('描述');
             $table->timestamps();
             $table->softDeletes();
         });
