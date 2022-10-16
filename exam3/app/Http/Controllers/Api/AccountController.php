@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class AccountController extends Controller
 {
@@ -33,12 +34,36 @@ class AccountController extends Controller
 
     public function store(Request $request)
     {
+        // 資料驗證
+        $validator =  Validator::make($request->toArray(), [
+            'amount' => ['required', 'numeric'],
+        ]);
+        if($validator->fails()) {
+            return response()
+                ->json([
+                    'status'   => false,
+                    'message'  => '資料格式錯誤',
+                    'data'	   => $validator->errors(),
+                ], '200');
+        }
+
         $user = Auth::user();
+        $balance = $user->balance + $request->amount;
+
+        // 低於0
+        if ($balance < 0) {
+            return response()
+                ->json([
+                    'status'   => false,
+                    'message'  => '存款金額不可低於 0',
+                    'data'	   => [],
+                ], '200');
+        }
         
         $record = $user->accounts()
             ->create([
                 'amount' => $request->amount,
-                'balance' => $user->balance + $request->amount
+                'balance' => $balance
             ]);
         
         $data['record'] = $record;

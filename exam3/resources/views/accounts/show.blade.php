@@ -112,6 +112,10 @@ const app = createApp({
             axios.get('{{ route("api.user.accounts.index") }}', {
             
             }).then((response) => {
+                if (response.data.status !== true) {
+                    return alert(response.data.message);
+                }
+
                 this.records = response.data.data.records;
             })
         },
@@ -120,8 +124,12 @@ const app = createApp({
             axios.post('{{ route("api.user.accounts.store") }}', {
                 amount : this.method == 'increase' ? Math.abs(this.amount) : Math.abs(this.amount) * -1
             }).then((response) => {
-
                 this.amount = 1;
+                
+                if (response.data.status !== true) {
+                    return alert(response.data.message);
+                }
+                alert(response.data.message);
                 this.getAccounts();
             })
         },

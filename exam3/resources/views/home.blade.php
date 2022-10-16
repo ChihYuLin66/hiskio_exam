@@ -34,7 +34,7 @@
                                     <td>{{ $user->account }}</td>
                                     <td>$ {{ $user->balance }}</td>
                                     <td>
-                                        <a href="{{ Route('accounts.show', $user->id) }}">
+                                        <a href="{{ route('accounts.show', $user->id) }}">
                                             <button
                                                 type="button" 
                                                 class="btn btn-primary mr-2"
