@@ -54,7 +54,14 @@ class DiscountHandler
 
 interface DiscountPriority {
 
-    public function clac(): int;
+    /**
+     * 計算折扣後的金額
+     * 
+     * @param int $total: 總金額
+     * @param int $amount: 折扣金額
+     * @param int $percent: 折扣百分比
+     */
+    public function clac($total, $amount, $percent): int;
 }
 
 /**
@@ -62,7 +69,7 @@ interface DiscountPriority {
  */
 class DiscountAmountsPriority implements DiscountPriority
 {
-    public function clac($total, $amount, $percent) 
+    public function clac($total, $amount, $percent): int
     { 
         return ($total - $amount) * $percent;
     }
@@ -73,7 +80,7 @@ class DiscountAmountsPriority implements DiscountPriority
  */
 class DiscountPercentPriority implements DiscountPriority 
 {
-    public function clac($total, $amount, $percent) 
+    public function clac($total, $amount, $percent): int
     { 
         return $total * $percent - $amount;
     }
@@ -90,7 +97,7 @@ class Cart
     /**
      * 購物車總計
      */
-    public function total()
+    public function total(): int
     {
         $total = 0;
         foreach ($cartItems as $key => $item) {
@@ -102,8 +109,10 @@ class Cart
 
     /**
      * 計算單品金額
+     * 
+     * @param int $productId: 商品 ID
      */
-    private function calcItemTotal($productId)
+    private function calcItemTotal($productId): int
     {
         $itemKey = $this->showItem($productId);
         $item = $this->cartItems[$itemKey];
@@ -120,8 +129,10 @@ class Cart
 
     /**
      * 尋找品項
+     * 
+     * @param int $productId: 商品 ID 
      */
-    public function showItem($productId)
+    public function showItem($productId): int
     {
         foreach ($cartItems as $key => $item) {
             if ($item['productId'] === $productId) {
@@ -134,8 +145,10 @@ class Cart
     
     /**
      * 新增項目到購物車
+     * 
+     * @param int $productId: 商品 ID
      */
-    public function addItem($productId) 
+    public function addItem($productId): void
     {
         $product = Product::find($productId);
 
@@ -151,8 +164,10 @@ class Cart
 
     /**
      * 刪除購物車品項
+     * 
+     * @param int $productId: 商品 ID
      */
-    public function removeItem($productId) 
+    public function removeItem($productId): void
     {
         $itemKey = $this->showItem($productId);
 
@@ -161,8 +176,11 @@ class Cart
 
     /**
      * 設定購物車品項數量
+     * 
+     * @param int $productId: 商品 ID
+     * @param int $quantities: 數量
      */
-    public function setItemQuantities($productId, $quantities) 
+    public function setItemQuantities($productId, $quantities): void
     {
         $itemKey = $this->showItem($productId);
         $this->cartItems[$itemKey]['quantities'] = $quantities;
@@ -170,8 +188,11 @@ class Cart
 
     /**
      * 增加品項折扣
+     * 
+     * @param int $productId: 商品 ID
+     * @param int $discountId: 折扣 ID
      */
-    public function addDiscountToItem($productId, $discountId)
+    public function addDiscountToItem($productId, $discountId): void
     {
         $itemKey = $this->showItem($productId);
         $item = $this->cartItems[$itemKey];
@@ -186,8 +207,10 @@ class Cart
 
     /**
      * 移除品項折扣
+     * 
+     * @param int $productId: 商品 ID
      */
-    public function removeDiscountFromItem($productId) 
+    public function removeDiscountFromItem($productId): void
     {
         $itemKey = $this->showItem($productId);
         $item = $this->cartItems[$itemKey];
