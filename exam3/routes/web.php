@@ -17,6 +17,30 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Auth::routes();
+// Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+// login
+Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
+Route::post('login', 'Auth\LoginController@login');
+Route::post('logout', 'Auth\LoginController@logout')->name('logout');
+
+// register
+Route::get('register', 'Auth\RegisterController@showRegistrationForm')->name('register');
+Route::post('register', 'Auth\RegisterController@register');
+
+
+Route::group(['middleware' => ['auth:web']], function () {
+    
+    Route::get('/home', 'HomeController@index')->name('home');
+
+    Route::get('/accounts/{user}', 'AccountController@show')->name('accounts.show');
+
+
+    Route::group(['prefix' => '/api/user/accounts', 'as' => 'api.user.accounts.'], function() {
+
+        Route::get('/', 'Api\AccountController@index')->name('index');
+        Route::post('/', 'Api\AccountController@store')->name('store');
+    });
+
+
+});

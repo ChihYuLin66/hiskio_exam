@@ -37,4 +37,15 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    // 餘額
+    public function getBalanceAttribute() 
+    {
+        return optional($this->accounts->sortBy('created_at')->last())->balance ?? 0;
+    }
+
+    // 關聯帳號
+    public function accounts() 
+    {
+        return $this->hasMany(Account::class);
+    }
 }
