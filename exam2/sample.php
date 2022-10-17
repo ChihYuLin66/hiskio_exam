@@ -46,16 +46,6 @@ try {
 $cart->addDiscountToItem(3, 3);
 
 
-// public function items()
-// public function total(): int
-// public function showItem($productId): int
-// public function addItem($productId, $quantities = 1): void
-// public function removeItem($productId): void
-// public function setItemQuantities($productId, $quantities): void
-// public function addDiscountToItem($productId, $discountId): void
-// public function removeDiscountFromItem($productId): void
-
-
 echo '<xmp>
 
 ### 購物車項目:

@@ -37,9 +37,9 @@ class Cart
      * 
      * @param int $productId: 商品 ID
      */
-    private function calcItemTotal($productId): int
+    public function calcItemTotal($productId): int
     {
-        $itemKey = $this->showItem($productId);
+        $itemKey = $this->showItemKey($productId);
         $item = $this->cartItems[$itemKey];
         $total = $item['price'] * $item['quantities'];
 
@@ -59,8 +59,7 @@ class Cart
      */
     private function setItemTotal($productId): void
     {
-        
-        $itemKey = $this->showItem($productId);
+        $itemKey = $this->showItemKey($productId);
         $item = $this->cartItems[$itemKey];
         $total = $item['price'] * $item['quantities'];
 
@@ -74,11 +73,11 @@ class Cart
     }
 
     /**
-     * 尋找品項
+     * 顯示品項索引
      * 
      * @param int $productId: 商品 ID 
      */
-    public function showItem($productId): int
+    public function showItemKey($productId): int
     {
         foreach ($this->cartItems as $key => $item) {
             if ($item['productId'] === $productId) {
@@ -88,25 +87,36 @@ class Cart
         
         throw new CartException('查無品項');
     }
+
+     /**
+     * 顯示品項
+     * 
+     * @param int $productId: 商品 ID 
+     */
+    public function showItem($productId): array
+    {
+        $itemKey = $this->showItemKey($productId);
+        return $this->cartItems[$itemKey];
+    }
     
     /**
      * 新增項目到購物車
      * 
      * @param int $productId: 商品 ID
-     * @param int $quantities: 數量
+     * @param int $quantities: 數量 [default: 1]
      */
     public function addItem($productId, $quantities = 1): void
     {
         // 若商品已在購物車，找出商品並加上數量。
         $existKey = null;
         foreach ($this->cartItems as $key => $item) {
-            if ($item['productId'] === $productId) {
+            if ($item['productId'] == $productId) {
                 $existKey = $key;
                 break;
             }
         }
 
-        if ($existKey) {
+        if (isset($existKey)) {
 
             $this->cartItems[$existKey]['quantities'] += $quantities;
         } else {
@@ -135,7 +145,7 @@ class Cart
      */
     public function removeItem($productId): void
     {
-        $itemKey = $this->showItem($productId);
+        $itemKey = $this->showItemKey($productId);
 
         unset($this->cartItems[$itemKey]);
     }
@@ -148,7 +158,7 @@ class Cart
      */
     public function setItemQuantities($productId, $quantities): void
     {
-        $itemKey = $this->showItem($productId);
+        $itemKey = $this->showItemKey($productId);
         $this->cartItems[$itemKey]['quantities'] = $quantities;
     }
 
@@ -160,7 +170,7 @@ class Cart
      */
     public function addDiscountToItem($productId, $discountId): void
     {
-        $itemKey = $this->showItem($productId);
+        $itemKey = $this->showItemKey($productId);
         $item = $this->cartItems[$itemKey];
 
         if (!empty($item['discountId'])) {
@@ -180,7 +190,7 @@ class Cart
      */
     public function removeDiscountFromItem($productId): void
     {
-        $itemKey = $this->showItem($productId);
+        $itemKey = $this->showItemKey($productId);
         $item = $this->cartItems[$itemKey];
 
         if (empty($item['discountId'])) {
