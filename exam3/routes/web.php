@@ -20,7 +20,7 @@ Route::post('register', 'Auth\RegisterController@register');
 // logged in
 Route::group(['middleware' => ['auth:web']], function () {
     
-    Route::get('/home', 'HomeController@index')->name('home');
+    Route::get('/accounts', 'HomeController@index')->name('home');
 
     // account
     Route::get('/accounts/{user}', 'AccountController@show')->name('accounts.show');

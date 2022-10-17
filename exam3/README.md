@@ -27,3 +27,22 @@
 **切記：每人的帳戶存款不能為負值**
 
 ---
+
+## 前言
+
+1. 
+```
+cp .env.example .env
+php artisan key:generate
+composer install
+```
+
+
+## 使用
+
+
+## 測試
+
+```bash
+php artisan test
+```
