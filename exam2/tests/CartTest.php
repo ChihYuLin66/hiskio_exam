@@ -3,7 +3,7 @@
 
 declare(strict_types=1);
 
-namespace Chihyulin66\HiskioExamCart\Tests;
+namespace ChihYuLin66\HiskioExamCart\Tests;
 
 use PHPUnit\Framework\TestCase;
 

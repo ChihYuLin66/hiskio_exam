@@ -1,10 +1,23 @@
 <?php
 
-namespace Chihyulin66\HiskioExamCart;
+namespace ChihYuLin66\HiskioExamCart;
+
+use ChihYuLin66\HiskioExamCart\Models\Product;
+use ChihYuLin66\HiskioExamCart\Models\Discount;
+use ChihYuLin66\HiskioExamCart\Exceptions\CartException;
+use ChihYuLin66\HiskioExamCart\Handlers\DiscountHandler;
 
 class Cart
 {
-    private $cartItems;
+    private $cartItems = [];
+
+    /**
+     * 購物車品項
+     */
+    public function items(): array
+    {
+        return $this->cartItems;
+    }
 
     /**
      * 購物車總計
@@ -12,7 +25,7 @@ class Cart
     public function total(): int
     {
         $total = 0;
-        foreach ($cartItems as $key => $item) {
+        foreach ($this->cartItems as $key => $item) {
             $total += $this->calcItemTotal($item['productId']);
         }
         
@@ -32,11 +45,32 @@ class Cart
 
         // 折扣
         if (!empty($item['discountId'])) {
-            $discount = Discount::find($discountId);
+            $discount = Discount::find($item['discountId']);
             $total = (new DiscountHandler)->calc($discount, $total);
         }
 
         return $total;
+    }
+
+    /**
+     * 設定計算單品金額
+     * 
+     * @param int $productId: 商品 ID
+     */
+    private function setItemTotal($productId): void
+    {
+        
+        $itemKey = $this->showItem($productId);
+        $item = $this->cartItems[$itemKey];
+        $total = $item['price'] * $item['quantities'];
+
+        // 折扣
+        if (!empty($item['discountId'])) {
+            $discount = Discount::find($discountId);
+            $total = (new DiscountHandler)->calc($discount, $total);
+        }
+
+        $this->cartItems[$itemKey]['total'] = $total;
     }
 
     /**
@@ -46,7 +80,7 @@ class Cart
      */
     public function showItem($productId): int
     {
-        foreach ($cartItems as $key => $item) {
+        foreach ($this->cartItems as $key => $item) {
             if ($item['productId'] === $productId) {
                 return $key;
             }
@@ -59,19 +93,39 @@ class Cart
      * 新增項目到購物車
      * 
      * @param int $productId: 商品 ID
+     * @param int $quantities: 數量
      */
-    public function addItem($productId): void
+    public function addItem($productId, $quantities = 1): void
     {
-        $product = Product::find($productId);
+        // 若商品已在購物車，找出商品並加上數量。
+        $existKey = null;
+        foreach ($this->cartItems as $key => $item) {
+            if ($item['productId'] === $productId) {
+                $existKey = $key;
+                break;
+            }
+        }
 
-        $this->cartItems[] = [
-            'productId' => $product->id,
-            'name' => $product->name,
-            'price' => $product->price,
-            'quantities' => $product->price,
-            'discountId' => null,
-            'total' => $this->calcItemTotal($productId),
-        ];
+        if ($existKey) {
+
+            $this->cartItems[$existKey]['quantities'] += $quantities;
+        } else {
+
+            // 新增品項
+            $product = Product::find($productId);
+
+            $this->cartItems[] = [
+                'productId' => $product->id,
+                'name' => $product->name,
+                'price' => $product->price,
+                'quantities' => $quantities,
+                'discountId' => null,
+                'discountName' => null,
+                'total' => 0,
+            ];
+        }
+
+        $this->setItemTotal($productId);
     }
 
     /**
@@ -113,7 +167,9 @@ class Cart
             throw new CartException('已使用優惠折扣，無法加入優惠折扣');
         }
 
-        $this->cartItems[$itemKey]['discountId'] = $discountId;
+        $discount = Discount::find($discountId);
+        $this->cartItems[$itemKey]['discountId'] = $discount->id;
+        $this->cartItems[$itemKey]['discountName'] = $discount->name;
         $this->cartItems[$itemKey]['total'] = $this->calcItemTotal($productId);
     }
 
@@ -132,6 +188,7 @@ class Cart
         }
 
         $this->cartItems[$itemKey]['discountId'] = null;
+        $this->cartItems[$itemKey]['discountName'] = null;
         $this->cartItems[$itemKey]['total'] = $this->calcItemTotal($productId);
     }
 }

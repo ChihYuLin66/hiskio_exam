@@ -5,7 +5,7 @@
     "license": "mit",
     "autoload": {
         "psr-4": {
-            "Chihyulin66\\HiskioExamCart\\": "src/"
+            "ChihYuLin66\\HiskioExamCart\\": "src/"
         }
     },
     "authors": [
