@@ -1,0 +1,21 @@
+{
+    "name": "chihyulin66/hiskio-exam-cart",
+    "description": "for exam",
+    "type": "library",
+    "license": "mit",
+    "autoload": {
+        "psr-4": {
+            "Chihyulin66\\HiskioExamCart\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "chihyulin",
+            "email": "yansmile0124@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require-dev": {
+        "phpunit/phpunit": "^9.5"
+    }
+}
