@@ -18,6 +18,7 @@ function dump(...$data)
 $climbStair = new ClimbStair();
 
 dump(
+    $climbStair->climb(-1),
     $climbStair->climb(1),
     $climbStair->climb(10),
     $climbStair->climb(11),

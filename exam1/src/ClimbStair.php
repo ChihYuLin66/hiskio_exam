@@ -12,6 +12,16 @@ class ClimbStair
     public function climb($n): array
     {
         $data = [];
+
+        // 階梯數不得小於0
+        if ($n <= 0) {
+            return [
+                'status' => false,
+                'message' => '階梯數不得小於0',
+                'data' => []
+            ];
+        }
+
         $max = floor($n/2);
     
         for ($i=$max; $i >= 0 ; $i--) { 
@@ -22,8 +32,12 @@ class ClimbStair
         }
     
         return [
-            'all' => $data,
-            'count' => count($data)
+            'status' => true,
+            'message' => 'success!',
+            'data' => [
+                'all' => $data,
+                'count' => count($data)
+            ]
         ];
     }
 }
