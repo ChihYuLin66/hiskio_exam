@@ -30,7 +30,7 @@ composer install
 2. 範例檔: `sample.php`
 3. 因測試關係,無關連資料庫，資料寫死於 Models
     - 10 個商品於 `src/Models/Product`
-    - 3 個折扣於 `src/Models/Discount`
+    - 4 個折扣於 `src/Models/Discount`
 
 
 ## 使用 Cart
