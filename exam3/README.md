@@ -33,6 +33,7 @@
 1. 
 ```
 cp .env.example .env
+cp .env.example .env.testing
 php artisan key:generate
 composer install
 ```
