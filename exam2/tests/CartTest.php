@@ -138,11 +138,22 @@ class CartTest extends TestCase
      */
     public function testTotal() 
     {
-        $this->assertTrue(true);
+        $productId = 1;
+        $discountId = 1;
+        $quantities = 10;
+        $cart = new Cart();
 
-        // let me think...
+        $cart->addItem(1, $quantities);
+        $cart->addDiscountToItem($productId, $discountId);
         
-        // $cart = new Cart();
+        // 試算
+        $product = Product::find($productId);
+        $discount = Discount::find($discountId);
+
+        $this->assertEquals(
+            $cart->total(), 
+            (new DiscountHandler)->calc($discount, $quantities * $product->price)
+        );
     }
     
 }
