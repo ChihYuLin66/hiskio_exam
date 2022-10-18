@@ -47,7 +47,7 @@
     ```
 
 3. env 設定 
-    - 新增: 測試用的資料庫設定
+    - 新增: 單元測試用的資料庫設定
         ```
         DB_TEST_CONNECTION=mysql
         DB_TEST_HOST=127.0.0.1
@@ -57,7 +57,7 @@
         DB_TEST_PASSWORD=
         ```
 
-4. 資料庫
+4. 資料表
     ```bash
     php artisan migrate
     ```
