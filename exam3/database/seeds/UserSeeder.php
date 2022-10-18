@@ -13,11 +13,14 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        // for test
-        User::create([
-            'name' => 'Dan',
-            'account' => 'dan',
-            'password' => Hash::make(123456),
-        ]);
+        
+        if (User::where('account', 'user')->count() == 0) {
+            // for test
+            User::create([
+                'name' => 'UserTest',
+                'account' => 'user',
+                'password' => Hash::make(123456),
+            ]);
+        }
     }
 }

@@ -30,17 +30,44 @@
 
 ## 前言
 
-1. 
-```
+1. 使用版本
+    -  Laravel: 7
+    -  PHP: 7.3
+    -  npm: 6.14.12
+    -  node: 12.22.1
+
+2.  初始化
+```bash
 cp .env.example .env
 cp .env.example .env.testing
 php artisan key:generate
 composer install
+npm install
+npm run dev
 ```
 
+3. env 設定 
 
-## 使用
+- 新增: 測試用的資料庫設定
+```
+DB_TEST_CONNECTION=mysql
+DB_TEST_HOST=127.0.0.1
+DB_TEST_PORT=3306
+DB_TEST_DATABASE=laravel_testing
+DB_TEST_USERNAME=root
+DB_TEST_PASSWORD=
+```
 
+4. 資料庫
+```bash
+php artisan migrate
+```
+
+5. 若需要測試的帳號  
+```bash
+php artisan db:seed
+```
+> 帳號:`user` ， 密碼: `123456`
 
 ## 測試
 
