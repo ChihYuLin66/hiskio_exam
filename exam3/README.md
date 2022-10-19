@@ -60,6 +60,7 @@
 4. 資料表
     ```bash
     php artisan migrate
+    php artisan migrate --database="mysql_testing"
     ```
 
 5. 若需要測試的帳號  
